@@ -14,6 +14,9 @@ const ArticleSchema = new Schema({
     type: String,
     required: true
   },
+  summary: {
+    type: String
+  },
 
   //   links the model to the comment model so it can get populated with the associated comment
   comment: {
