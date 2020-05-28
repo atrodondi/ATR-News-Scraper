@@ -25,7 +25,7 @@ app.use(express.static(__dirname + "/public"));
 // Connect to the Mongo DB
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsScraper";
 
-mongoose.connect("mongodb://localhost/newsScraper", {
+mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });

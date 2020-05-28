@@ -29,15 +29,25 @@
     <div class="background-image"></div>
     <div class="caption">
         <h1>ATR News Scraper</h1>
-        <p>New York Times</p>
+        <p>The Guardian News</p>
     </div>
 </div>
 <div class="container-fluid articleBox">
+    <ul>
+        {{#each articles}}
+        <li>
+            <h1>{{title}}</h1>
+            <h3>{{summary}}</h3>
+            <a href="{{link}}">Article Link</a>
+
+        </li>
+        {{/each }}
+    </ul>
 </div>
 
 <footer class="footer">
     <div class="container">
-        <p>NY Times Scraper</p>
+        <p>The Guardian Scraper</p>
     </div>
 </footer>
 

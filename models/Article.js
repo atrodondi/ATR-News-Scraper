@@ -8,7 +8,8 @@ const Schema = mongoose.Schema;
 const ArticleSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   link: {
     type: String,
@@ -16,6 +17,11 @@ const ArticleSchema = new Schema({
   },
   summary: {
     type: String
+  },
+
+  saved: {
+    type: Boolean,
+    default: false
   },
 
   //   links the model to the comment model so it can get populated with the associated comment
