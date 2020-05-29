@@ -34,13 +34,25 @@
 </div>
 <div class="container-fluid articleBox">
     <ul>
-        {{#each articles}}
+        {{#each article}}
+        {{#unless saved}}
+
         <li>
-            <h1>{{title}}</h1>
-            <h3>{{summary}}</h3>
-            <a href="{{link}}">Article Link</a>
+            <div class="card">
+                <div class="card-header">
+                    Breaking News!
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{title}}</h5>
+                    <p class="card-text">{{summary}}</p>
+                    <a href="{{link}}" class="btn btn-primary">Article</a>
+                    <button class="btn btn-success saveBtn float-right" data-id="{{_id}}">Save Article</button>
+                </div>
+            </div>
+
 
         </li>
+        {{/unless}}
         {{/each }}
     </ul>
 </div>

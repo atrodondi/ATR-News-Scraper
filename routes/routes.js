@@ -6,11 +6,15 @@ var cheerio = require("cheerio");
 module.exports = app => {
   // home page
   app.get("/", (req, res) => {
-    // rending the home screen with the objects from DB to render to handlebars
+    db.Article.find({ saved: false })
+      // added lean to get a JSON Object instead of making one, took some googling
+      .lean()
+      .then(dbArticle => {
+        // console.log("DBARTICLE RIGHT HERE >>>><<><><<", dbArticle);
 
-    res.render("home");
+        res.render("home", { article: dbArticle });
+      });
   });
-
   //   saved articles page
   app.get("/saved", (req, res) => {
     res.render("saved");
@@ -32,14 +36,24 @@ module.exports = app => {
         // console.log(result);
         resultArr.push(result);
       });
-      db.Article.create(resultArr)
-        .then(dbArticle => {
-          console.log("Articles that you were looking for", dbArticle);
-          res.json(dbArticle);
-        })
-        .catch(err => {
+      db.Article.create(resultArr, (err, articles) => {
+        if (err) {
           console.log(err);
-        });
+        } else {
+          console.log(articles);
+          var newObjArr = articles.map(arrItem => {
+            return {
+              id: arrItem._id,
+              title: arrItem.title,
+              link: arrItem.link,
+              summary: arrItem.summary,
+              saved: arrItem.saved
+            };
+          });
+          res.send(newObjArr);
+        }
+      });
+
       console.log("Scrape complete");
     });
   });
