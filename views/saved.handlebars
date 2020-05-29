@@ -30,7 +30,31 @@
         <p>Your favorite Articles from the Guardian</p>
     </div>
 </div>
+{{!-- ARTICLES GO ISIDE THIS DIV --}}
 <div class="container-fluid articleBox">
+    <ul>
+        {{#each article}}
+        {{#if saved}}
+
+        <li>
+            <div class="card">
+                <div class="card-header">
+                    Breaking News!
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{title}}</h5>
+                    <p class="card-text">{{summary}}</p>
+                    <a href="{{link}}" class="btn btn-primary">Article</a>
+                    <button class="btn btn-info comment float-right" data-id="{{_id}}">View Comments</button>
+                    <button class="btn btn-info delete float-right" data-id="{{_id}}">Delete From Saved</button>
+                </div>
+            </div>
+
+
+        </li>
+        {{/if}}
+        {{/each }}
+    </ul>
 </div>
 
 <footer class="footer">

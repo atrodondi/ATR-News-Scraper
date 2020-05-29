@@ -17,7 +17,11 @@ module.exports = app => {
   });
   //   saved articles page
   app.get("/saved", (req, res) => {
-    res.render("saved");
+    db.Article.find({ saved: true })
+      .lean()
+      .then(dbArticle => {
+        res.render("saved", { article: dbArticle });
+      });
   });
 
   // listening for a scrape call from front end when the scrape new articles button is pushed
@@ -57,4 +61,18 @@ module.exports = app => {
       console.log("Scrape complete");
     });
   });
+
+  // save article route
+
+  app.get("/saveArticle/:id", (req, res) => {
+    console.log(req.params.id);
+    db.Article.updateOne({ _id: req.params.id }, { saved: true }).then(
+      result => {
+        console.log(result);
+        res.json(result);
+      }
+    );
+  });
+
+  // end of modyle exports below this, app is not defined
 };

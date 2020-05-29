@@ -7,12 +7,20 @@ $(document).ready(function () {
       url: "/scrape"
     }).then(article => {
       console.log("finished", article);
+      location.reload();
     });
     // end of document on click scrape new
   });
 
   $(document).on("click", ".saveBtn", function () {
     console.log("saved clicked");
+    let ID = $(this).attr("data-id");
+    $.ajax({
+      type: "GET",
+      url: "/saveArticle/" + ID
+    }).then(function (data) {
+      location.reload();
+    });
   });
 
   // end of document ready
