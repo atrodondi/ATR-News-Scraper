@@ -74,5 +74,27 @@ module.exports = app => {
     );
   });
 
+  // save comment
+
+  app.post("/saveComment/:id", (req, res) => {
+    console.log(req.body);
+    console.log(req.params.id);
+    db.Comment.create(req.body)
+      .then(dbComment => {
+        return db.Article.findOneAndUpdate(
+          { _id: req.params.id },
+          { comment: dbComment._id },
+          { new: true }
+        );
+      })
+      .then(dbArticle => {
+        console.log(dbArticle);
+        res.send(dbArticle);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
   // end of modyle exports below this, app is not defined
 };

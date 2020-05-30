@@ -23,23 +23,30 @@ $(document).ready(function () {
     });
   });
 
+  $(document).on("click", ".comment", function () {
+    $("#commentModal" + $(this).attr("data-id")).modal("toggle");
+  });
+
+  $(document).on("click", ".saveComment", function () {
+    var thisID = $(this).attr("data-id");
+    var newCommentObj = {
+      title: $("#newCommentTitle" + thisID)
+        .val()
+        .trim(),
+      body: $("#newCommentBody" + thisID)
+        .val()
+        .trim()
+    };
+    console.log(newCommentObj);
+    $.ajax({
+      type: "POST",
+      url: "/saveComment/" + thisID,
+      data: newCommentObj
+    }).then(data => {
+      console.log(data);
+      $("#newCommentTitle" + data._id).val("");
+      $("#newCommentBody" + data._id).val("");
+    });
+  });
   // end of document ready
 });
-
-// app.get("/", (req, res) => {
-// db.Article.find({ saved: false }).then(dbArticle => {
-//   console.log("DBARTICLE RIGHT HERE >>>><<><><<", dbArticle);
-//   // had to make a new array of objects because abarticle did not want to work to send back to handlebars. couldnt figure this out, took forever
-//   var newObjArr = dbArticle.map(arrItem => {
-//     return {
-//       id: arrItem._id,
-//       title: arrItem.title,
-//       link: arrItem.link,
-//       summary: arrItem.summary,
-//       saved: arrItem.saved
-//     };
-//   });
-//   // rending the home screen with the objects from DB to render to handlebars
-//   res.render("home", { articles: newObjArr });
-// });
-// });
