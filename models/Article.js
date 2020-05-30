@@ -24,11 +24,13 @@ const ArticleSchema = new Schema({
     default: false
   },
 
-  //   links the model to the comment model so it can get populated with the associated comment
-  comment: {
-    type: Schema.Types.ObjectId,
-    ref: "Comment"
-  }
+  // //   links the model to the comment model so it can get populated with the associated comment
+  comment: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment"
+    }
+  ]
 });
 
 // creates the model from the above schema, using mongoose model method

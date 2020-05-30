@@ -18,6 +18,8 @@ module.exports = app => {
   //   saved articles page
   app.get("/saved", (req, res) => {
     db.Article.find({ saved: true })
+      // had to add populate so that handlebars could grab it when i opened comment modal
+      .populate("comment")
       .lean()
       .then(dbArticle => {
         res.render("saved", { article: dbArticle });
@@ -81,12 +83,11 @@ module.exports = app => {
     console.log(req.params.id);
     db.Comment.create(req.body)
       .then(dbComment => {
-        db.Article.findOneAndUpdate(
+        return db.Article.findOneAndUpdate(
           { _id: req.params.id },
-          { comment: dbComment._id },
+          { $push: { comment: dbComment.id } },
           { new: true }
         );
-        return { id: dbComment._id, body: dbComment.body };
       })
       .then(dbComment => {
         console.log(dbComment);
@@ -108,6 +109,13 @@ module.exports = app => {
       .catch(err => {
         res.send(err);
       });
+  });
+
+  // deleting comments
+  app.get("/deleteComment/:id", (req, res) => {
+    db.Comment.deleteOne({ _id: req.params.id }).then(dbComment => {
+      res.send(dbComment);
+    });
   });
 
   // end of modyle exports below this, app is not defined

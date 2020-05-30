@@ -41,9 +41,8 @@ $(document).ready(function () {
   $(document).on("click", ".saveComment", function () {
     var thisID = $(this).attr("data-id");
     var newCommentObj = {
-      title: $("#newCommentTitle" + thisID)
-        .val()
-        .trim(),
+      _articleId: thisID,
+
       body: $("#newCommentBody" + thisID)
         .val()
         .trim()
@@ -55,10 +54,22 @@ $(document).ready(function () {
       data: newCommentObj
     }).then(data => {
       console.log("response from saving a comment", data);
-      // use jquery here to populate comment? with a button that ties in the id of the comment to delete it from the database?
-      $("#newCommentTitle" + thisID).val("");
+
       $("#newCommentBody" + thisID).val("");
+      location.reload();
     });
   });
+
+  $(document).on("click", ".deleteComment", function () {
+    let thisID = $(this).attr("data-id");
+    $.ajax({
+      type: "GET",
+      url: "/deleteComment/" + thisID
+    }).then(data => {
+      console.log(data);
+      location.reload();
+    });
+  });
+
   // end of document ready
 });

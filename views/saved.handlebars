@@ -66,13 +66,18 @@
                         </div>
                         <div class="modal-body" id="modalBody{{_id}}">
                             {{#each comment}}
-                            {{title}}{{body}}
+                            <div class="card">
+                                <div class="card-body">
+                                    {{body}}
+                                    <button class="btn btn-danger float-right deleteComment" data-id="{{_id}}">Delete
+                                        comment</button>
+                                </div>
+                            </div>
+
                             {{/each}}
                         </div>
                         <div class="modal-footer">
-                            <input placeholder="new comment title" type="text" id="newCommentTitle{{_id}}">
                             <input placeholder="new comment body" type="text" id="newCommentBody{{_id}}">
-
                             <button type="button" class="btn btn-primary saveComment" id="saveComment{{_id}}"
                                 data-id="{{_id}}">Save
                                 Comment</button>
