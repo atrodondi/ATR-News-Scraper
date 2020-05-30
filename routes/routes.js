@@ -74,25 +74,39 @@ module.exports = app => {
     );
   });
 
-  // save comment
+  // save comment route
 
   app.post("/saveComment/:id", (req, res) => {
     console.log(req.body);
     console.log(req.params.id);
     db.Comment.create(req.body)
       .then(dbComment => {
-        return db.Article.findOneAndUpdate(
+        db.Article.findOneAndUpdate(
           { _id: req.params.id },
           { comment: dbComment._id },
           { new: true }
         );
+        return { id: dbComment._id, body: dbComment.body };
       })
-      .then(dbArticle => {
-        console.log(dbArticle);
-        res.send(dbArticle);
+      .then(dbComment => {
+        console.log(dbComment);
+        res.send(dbComment);
       })
       .catch(err => {
         console.log(err);
+      });
+  });
+
+  // getting comments from articles and displaying in modal
+  app.get("/getComments/:id", (req, res) => {
+    console.log(req.params.id);
+    db.Article.findOne({ _id: req.params.id })
+      .populate("comment")
+      .then(dbArticle => {
+        res.send(dbArticle);
+      })
+      .catch(err => {
+        res.send(err);
       });
   });
 
