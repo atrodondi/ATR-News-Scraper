@@ -10,7 +10,7 @@ $(document).ready(function () {
       $(".articleBox").empty();
       if (article.name === "MongoError") {
         $(".articleBox").append(
-          "<div class='card'><div class='card-body bg-warning'>Uh Oh, looks like you need to scrape some articles!</div></div>"
+          "<div class='card'><div class='card-body bg-warning'>Uh Oh, looks like there are no more new articles today, come by another time!</div></div>"
         );
       } else {
         for (i in article) {
