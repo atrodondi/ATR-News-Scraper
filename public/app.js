@@ -1,12 +1,10 @@
 $(document).ready(function () {
   // scrape button push - starts the scrape
   $(document).on("click", ".scrape-new", function () {
-    console.log("scrape clicked");
     $.ajax({
       type: "GET",
       url: "/scrape"
     }).then(article => {
-      console.log("finished", article);
       $(".articleBox").empty();
       if (article.name === "MongoError") {
         $(".articleBox").append(
@@ -35,13 +33,11 @@ $(document).ready(function () {
 
   // save an article button
   $(document).on("click", ".saveBtn", function () {
-    console.log("saved clicked");
     let ID = $(this).attr("data-id");
     $.ajax({
       type: "GET",
       url: "/saveArticle/" + ID
     }).then(function (data) {
-      console.log(data);
       $("li[data-id='" + ID + "'").remove();
     });
   });
@@ -54,9 +50,7 @@ $(document).ready(function () {
     $.ajax({
       type: "GET",
       url: "/getComments/" + thisID
-    }).then(data => {
-      console.log("ARTICLE WITH COMMENT", data);
-    });
+    }).then(data => {});
   });
 
   // saving a comment button
@@ -69,14 +63,11 @@ $(document).ready(function () {
         .val()
         .trim()
     };
-    console.log(newCommentObj);
     $.ajax({
       type: "POST",
       url: "/saveComment/" + thisID,
       data: newCommentObj
     }).then(data => {
-      console.log("response from saving a comment", data);
-
       $("#newCommentBody" + thisID).val("");
       location.reload();
     });
@@ -89,7 +80,6 @@ $(document).ready(function () {
       type: "GET",
       url: "/deleteComment/" + thisID
     }).then(data => {
-      console.log(data);
       location.reload();
     });
   });
@@ -101,7 +91,6 @@ $(document).ready(function () {
       type: "GET",
       url: "/deleteSaved/" + thisID
     }).then(data => {
-      console.log(data);
       location.reload();
     });
   });

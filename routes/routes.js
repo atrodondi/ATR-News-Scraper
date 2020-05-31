@@ -33,14 +33,12 @@ module.exports = app => {
         result.summary = $(element)
           .find('div[class="fc-item__standfirst"]')
           .text();
-        // console.log(result);
         resultArr.push(result);
       });
       db.Article.create(resultArr, (err, articles) => {
         if (err) {
           res.send(err);
         } else {
-          console.log(articles);
           var newObjArr = articles.map(arrItem => {
             return {
               id: arrItem._id,
@@ -53,15 +51,12 @@ module.exports = app => {
           res.send(newObjArr);
         }
       });
-
-      console.log("Scrape complete");
     });
   });
 
   // save article route
 
   app.get("/saveArticle/:id", (req, res) => {
-    console.log(req.params.id);
     db.Article.updateOne({ _id: req.params.id }, { saved: true }).then(
       result => {
         res.json(result);
@@ -72,8 +67,6 @@ module.exports = app => {
   // save comment route
 
   app.post("/saveComment/:id", (req, res) => {
-    console.log(req.body);
-    console.log(req.params.id);
     db.Comment.create(req.body)
       .then(dbComment => {
         return db.Article.findOneAndUpdate(
@@ -83,17 +76,15 @@ module.exports = app => {
         );
       })
       .then(dbComment => {
-        console.log(dbComment);
         res.send(dbComment);
       })
       .catch(err => {
-        console.log(err);
+        res.send(err);
       });
   });
 
   // getting comments from articles and displaying in modal
   app.get("/getComments/:id", (req, res) => {
-    console.log(req.params.id);
     db.Article.findOne({ _id: req.params.id })
       .populate("comment")
       .then(dbArticle => {
