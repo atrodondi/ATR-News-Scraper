@@ -34,6 +34,11 @@
 </div>
 {{!-- ARTICLES GO INSIDE THIS DIV --}}
 <div class="container-fluid articleBox">
+    <div class="card">
+        <div class="card-body bg-warning">
+            Uh Oh, there are no Articles! Scrape bro!
+        </div>
+    </div>
     <ul>
         {{#each article}}
         {{#unless saved}}

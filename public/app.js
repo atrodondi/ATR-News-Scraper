@@ -7,7 +7,28 @@ $(document).ready(function () {
       url: "/scrape"
     }).then(article => {
       console.log("finished", article);
-      location.reload();
+      $(".articleBox").empty();
+      if (article.name === "MongoError") {
+        $(".articleBox").append(
+          "<div class='card'><div class='card-body bg-warning'>Uh Oh, looks like you need to scrape some articles!</div></div>"
+        );
+      } else {
+        for (i in article) {
+          $(".articleBox").append(
+            "<li data-id='" +
+              article[i].id +
+              "'><div class='card'><div class='card-header'> Breaking News!</div><div class='card-body'><h5 class='card-title'>" +
+              article[i].title +
+              "</h5><p class='card-text'>" +
+              article[i].summary +
+              "</p><a href='" +
+              article[i].link +
+              "' class='btn btn-primary'>Article</a><button class='btn btn-success saveBtn float-right' data-id='" +
+              article[i].id +
+              "'>Save Article</button></div></div></li>"
+          );
+        }
+      }
     });
     // end of document on click scrape new
   });
@@ -20,7 +41,8 @@ $(document).ready(function () {
       type: "GET",
       url: "/saveArticle/" + ID
     }).then(function (data) {
-      location.reload();
+      console.log(data);
+      $("li[data-id='" + ID + "'").remove();
     });
   });
 
@@ -60,6 +82,7 @@ $(document).ready(function () {
     });
   });
 
+  // deleting a comment
   $(document).on("click", ".deleteComment", function () {
     let thisID = $(this).attr("data-id");
     $.ajax({
@@ -69,6 +92,26 @@ $(document).ready(function () {
       console.log(data);
       location.reload();
     });
+  });
+
+  // deleting a saved article from saved page
+  $(document).on("click", ".delete", function () {
+    let thisID = $(this).attr("data-id");
+    $.ajax({
+      type: "GET",
+      url: "/deleteSaved/" + thisID
+    }).then(data => {
+      console.log(data);
+      location.reload();
+    });
+  });
+
+  // clear articles button
+  $(document).on("click", ".clear", function () {
+    $(".articleBox").empty();
+    $(".articleBox").append(
+      "<div class='card'><div class='card-body bg-warning'>Uh Oh, looks like you need to scrape some articles!</div></div>"
+    );
   });
 
   // end of document ready

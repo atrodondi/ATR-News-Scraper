@@ -6,15 +6,9 @@ var cheerio = require("cheerio");
 module.exports = app => {
   // home page
   app.get("/", (req, res) => {
-    db.Article.find({ saved: false })
-      // added lean to get a JSON Object instead of making one, took some googling
-      .lean()
-      .then(dbArticle => {
-        // console.log("DBARTICLE RIGHT HERE >>>><<><><<", dbArticle);
-
-        res.render("home", { article: dbArticle });
-      });
+    res.render("home");
   });
+
   //   saved articles page
   app.get("/saved", (req, res) => {
     db.Article.find({ saved: true })
@@ -44,7 +38,7 @@ module.exports = app => {
       });
       db.Article.create(resultArr, (err, articles) => {
         if (err) {
-          console.log(err);
+          res.send(err);
         } else {
           console.log(articles);
           var newObjArr = articles.map(arrItem => {
@@ -70,7 +64,6 @@ module.exports = app => {
     console.log(req.params.id);
     db.Article.updateOne({ _id: req.params.id }, { saved: true }).then(
       result => {
-        console.log(result);
         res.json(result);
       }
     );
@@ -116,6 +109,15 @@ module.exports = app => {
     db.Comment.deleteOne({ _id: req.params.id }).then(dbComment => {
       res.send(dbComment);
     });
+  });
+
+  // deleting saved article from DB
+  app.get("/deleteSaved/:id", (req, res) => {
+    db.Article.updateOne({ _id: req.params.id }, { saved: false }).then(
+      result => {
+        res.json(result);
+      }
+    );
   });
 
   // end of modyle exports below this, app is not defined
