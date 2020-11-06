@@ -2,6 +2,7 @@ var express = require("express");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 var exphbs = require("express-handlebars");
+require("dotenv").config();
 
 // Require all models
 var db = require("./models");
@@ -23,20 +24,23 @@ app.use(express.json());
 app.use(express.static(__dirname + "/public"));
 
 // Connect to the Mongo DB
-var MONGODB_URI =
-  process.env.MONGODB_URI ||
-  "mongodb://user:password1@ds151853.mlab.com:51853/heroku_wk8x54d6";
+const MONGODB_URI = process.env.DB_URI;
 
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(console.log("connected to MongoDB successfully, full send baby!!"))
+  .catch((err) => {
+    console.log(err);
+  });
 
 // handlebars
 app.engine(
   "handlebars",
   exphbs({
-    defaultLayout: "main"
+    defaultLayout: "main",
   })
 );
 app.set("view engine", "handlebars");

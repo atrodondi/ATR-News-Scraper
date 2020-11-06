@@ -3,7 +3,7 @@ var db = require("../models");
 var axios = require("axios");
 var cheerio = require("cheerio");
 
-module.exports = app => {
+module.exports = (app) => {
   // home page
   app.get("/", (req, res) => {
     res.render("home");
@@ -15,14 +15,15 @@ module.exports = app => {
       // had to add populate so that handlebars could grab it when i opened comment modal
       .populate("comment")
       .lean()
-      .then(dbArticle => {
+      .then((dbArticle) => {
         res.render("saved", { article: dbArticle });
       });
   });
 
   // listening for a scrape call from front end when the scrape new articles button is pushed
   app.get("/scrape", (req, res) => {
-    axios.get("https://www.theguardian.com/us-news").then(response => {
+    console.log("scrape click");
+    axios.get("https://www.theguardian.com/us-news").then((response) => {
       var $ = cheerio.load(response.data);
       var resultArr = [];
 
@@ -39,13 +40,13 @@ module.exports = app => {
         if (err) {
           res.send(err);
         } else {
-          var newObjArr = articles.map(arrItem => {
+          var newObjArr = articles.map((arrItem) => {
             return {
               id: arrItem._id,
               title: arrItem.title,
               link: arrItem.link,
               summary: arrItem.summary,
-              saved: arrItem.saved
+              saved: arrItem.saved,
             };
           });
           res.send(newObjArr);
@@ -58,7 +59,7 @@ module.exports = app => {
 
   app.get("/saveArticle/:id", (req, res) => {
     db.Article.updateOne({ _id: req.params.id }, { saved: true }).then(
-      result => {
+      (result) => {
         res.json(result);
       }
     );
@@ -68,17 +69,17 @@ module.exports = app => {
 
   app.post("/saveComment/:id", (req, res) => {
     db.Comment.create(req.body)
-      .then(dbComment => {
+      .then((dbComment) => {
         return db.Article.findOneAndUpdate(
           { _id: req.params.id },
           { $push: { comment: dbComment.id } },
           { new: true }
         );
       })
-      .then(dbComment => {
+      .then((dbComment) => {
         res.send(dbComment);
       })
-      .catch(err => {
+      .catch((err) => {
         res.send(err);
       });
   });
@@ -87,17 +88,17 @@ module.exports = app => {
   app.get("/getComments/:id", (req, res) => {
     db.Article.findOne({ _id: req.params.id })
       .populate("comment")
-      .then(dbArticle => {
+      .then((dbArticle) => {
         res.send(dbArticle);
       })
-      .catch(err => {
+      .catch((err) => {
         res.send(err);
       });
   });
 
   // deleting comments
   app.get("/deleteComment/:id", (req, res) => {
-    db.Comment.deleteOne({ _id: req.params.id }).then(dbComment => {
+    db.Comment.deleteOne({ _id: req.params.id }).then((dbComment) => {
       res.send(dbComment);
     });
   });
@@ -105,7 +106,7 @@ module.exports = app => {
   // deleting saved article from DB
   app.get("/deleteSaved/:id", (req, res) => {
     db.Article.updateOne({ _id: req.params.id }, { saved: false }).then(
-      result => {
+      (result) => {
         res.json(result);
       }
     );
