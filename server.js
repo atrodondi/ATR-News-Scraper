@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.static(__dirname + "/public"));
 
 // Connect to the Mongo DB
-const MONGO_CONNECTION = process.env.DB_URI;
+const MONGO_CONNECTION = process.env.MONGO_CONNECTION;
 
 mongoose
   .connect(MONGO_CONNECTION || "mongodb://localhost/atrscraper", {
