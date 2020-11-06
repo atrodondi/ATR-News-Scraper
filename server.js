@@ -27,7 +27,7 @@ app.use(express.static(__dirname + "/public"));
 const MONGO_CONNECTION = process.env.MONGO_CONNECTION;
 
 mongoose
-  .connect(MONGO_CONNECTION || "mongodb://localhost/atrscraper", {
+  .connect(MONGO_CONNECTION, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
