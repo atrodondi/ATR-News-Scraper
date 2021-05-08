@@ -27,6 +27,6 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "handlebars": "^4.7.6"
+    "handlebars": "^4.7.7"
   }
 }
